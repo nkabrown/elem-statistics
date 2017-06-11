@@ -1,6 +1,7 @@
 class FrequencyTable {
   constructor(el, d, c) {
-    this.mount = el; this.data = d;
+    this.mount = el;
+    this.data = d;
     this.caption = c;
   }
 
@@ -14,6 +15,11 @@ class FrequencyTable {
      .enter().append('tr')
        .attr('class', 'row')
        .html(d => `<td>${d.key}</td><td>${d.values}</td>`);
+
+    d3.select('tbody')
+      .append('tr')
+      .attr('class', 'row')
+      .html(`<span class="total">N=</span><td class="lineover">${d3.sum(this.data, d => d.values)}</td>`);
   }
 }
 
@@ -24,6 +30,11 @@ d3.csv('../data/scores.csv', (error, data) => {
      .key(d => d.score)
      .rollup(leaves => leaves.length)
      .entries(data);
+
+  // arrange the measures in order from highest to lowest
+  groupedScores.sort((a,b) => {
+    return +b.key - +a.key;
+  });
 
   d3.text('src/modal/frequencyTable.html', str => {
      d3.select('.container').append('div').attr('class', 'freq-table').html(str);
