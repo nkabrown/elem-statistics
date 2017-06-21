@@ -31,9 +31,10 @@ d3.csv('../data/scores.csv', (error, data) => {
   if (error) throw error;
 
   const maxValue = d3.max(data, d => +d.score);
-  // map range of scores to zero values in order from highest to lowest
+  const minValue = d3.min(data, d => +d.score);
+  // map range of scores to zero values in order from highest to lowest measure
   let scores = new Map();
-  for (let i = maxValue; i > 0; i--) {
+  for (let i = maxValue; i >= minValue; i--) {
     scores.set(i, 0); 
   }
 

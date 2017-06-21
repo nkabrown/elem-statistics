@@ -1,5 +1,23 @@
-td {
+figcaption {
+  font-weight: 700;
+}
+
+table {
+  margin: 15px 0;
+}
+
+td,
+th {
   padding-right: 15px;
+}
+
+th {
+  font-size: 12px;
+  font-weight: 300;
+}
+
+td {
+  text-align: center;
 }
 
 .row:nth-last-child(2) {
