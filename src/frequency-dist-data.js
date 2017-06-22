@@ -1,3 +1,10 @@
+/*
+ * Frequency Distribution Tables – How frequently is data distributed at each measure?
+ *
+ * The first column contains the measure ordered from highest to lowest, the second column contains the number of cases of that measure.
+ * Use the symbol N to represent the total number of cases in a group.
+ */
+
 class FrequencyDistTable {
   constructor(el, d, c, a) {
     this.mount = el;
@@ -43,7 +50,7 @@ d3.csv('../data/scores.csv', (error, data) => {
     const key = +d.score;
     if (scores.has(key)) {
       let val = scores.get(key);
-      val = val + 1;
+      val += 1;
       scores.set(key, val);
     }
   };

@@ -1,3 +1,8 @@
+html,
+body {
+  font-family: "Stymie", "Baskerville", serif;
+}
+
 figcaption {
   font-weight: 700;
 }
