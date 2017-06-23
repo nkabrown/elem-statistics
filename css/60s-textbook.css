@@ -43,7 +43,7 @@ td:nth-child(odd) {
   padding-left: 25px;
 }
 
-.row:nth-last-child(2) td:nth-child(5) {
+.row:nth-last-child(1) td:nth-child(5) {
   padding-right: 0;
   text-align: right;
 }
