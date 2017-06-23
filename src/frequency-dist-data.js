@@ -6,9 +6,10 @@
  */
 
 class FrequencyDistTable {
-  constructor(el, d, c, a) {
+  constructor(el, d, m, c, a) {
     this.mount = el;
     this.data = d;
+    this.measure = m;
     this.caption = c;
     this.attribution = a;
   }
@@ -16,6 +17,9 @@ class FrequencyDistTable {
   init() {
     d3.select('figcaption')
        .text(this.caption);
+
+    d3.select('thead')
+       .html(d => `<tr><th>${this.measure}</th><th>&#402;</th><th>${this.measure}</th><th>&#402;</th><th>${this.measure}</th><th>&#402;</th></tr>`);
 
     d3.select(this.mount)
        .selectAll('.row')
@@ -72,6 +76,6 @@ d3.csv('../data/scores.csv', (error, data) => {
   d3.text('src/modal/frequencyTable.html', str => {
      d3.select('.container').append('div').attr('class', 'freq-table').html(str);
 
-     new FrequencyDistTable('tbody', rows, 'Table 1.1   /   Simple Frequency Distribution of Anxiety Scores for 100 Colege Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
+     new FrequencyDistTable('tbody', rows, 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 Colege Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
   });
 });

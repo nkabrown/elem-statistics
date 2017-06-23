@@ -17,19 +17,24 @@ table {
   margin: 15px 0;
 }
 
+thead tr {
+  height: 30px;
+}
+
 td,
 th {
   padding-right: 15px;
 }
 
 th {
-  font-size: 12px;
-  font-weight: 300;
+  font-size: 11px;
+  font-weight: 200;
   width: 25px;
 }
 
 td {
   text-align: center;
+  font-size: 13px;
 }
 
 th:nth-child(even),
@@ -46,11 +51,6 @@ td:nth-child(odd) {
 .row:nth-last-child(1) td:nth-child(5) {
   padding-right: 0;
   text-align: right;
-}
-
-.row:nth-last-child(2) {
-  height: 25px;
-  vertical-align: text-top;
 }
 
 .total {
