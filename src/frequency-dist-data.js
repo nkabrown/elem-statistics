@@ -22,12 +22,7 @@ class FrequencyDistTable {
        .data(this.data)
      .enter().append('tr')
        .attr('class', 'row')
-       .html(d => `<td>${d[0]}</td><td>${d[1]}</td>`);
-
-    d3.select('tbody')
-      .append('tr')
-      .attr('class', 'row')
-      .html(`<span class="total">N=</span><td class="lineover">${d3.sum(this.data, d => d[1])}</td>`);
+       .html(d => `<td>${d[0]}</td><td>${d[1]}</td><td>${d[2]}</td><td>${d[3]}</td><td>${d[4]}</td><td>${d[5]}</td>`);
 
     d3.select('small')
        .text(this.attribution);
@@ -58,9 +53,25 @@ d3.csv('../data/scores.csv', (error, data) => {
   // convert map to an array of pairs
   scores = [...scores];
 
+  // calculate column length
+  const tdLength = scores.length + 1;
+  const columnLength = Math.ceil(tdLength / 3);
+
+  let column_data = [];
+  const column_one_data = scores.slice(0,13);
+  const column_two_data = scores.slice(13,26);
+  const column_three_data = scores.slice(26,39);
+
+  let rows = [];
+  for (let i = 0; i < columnLength; i++) {
+    let row_data = [column_one_data[i][0], column_one_data[i][1], column_two_data[i][0], column_two_data[i][1], column_three_data[i] ? column_three_data[i][0] : 'N =', column_three_data[i] ? column_three_data[i][1] : `<span class="lineover">${d3.sum(scores, d => d[1])}</span>`];
+    rows.push(row_data);
+  }
+
+
   d3.text('src/modal/frequencyTable.html', str => {
      d3.select('.container').append('div').attr('class', 'freq-table').html(str);
 
-     new FrequencyDistTable('tbody', scores, 'Table 1.1 / Frequency Distribution of Anxiety Scores for 100 Colege Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
+     new FrequencyDistTable('tbody', rows, 'Table 1.1   /   Simple Frequency Distribution of Anxiety Scores for 100 Colege Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
   });
 });
