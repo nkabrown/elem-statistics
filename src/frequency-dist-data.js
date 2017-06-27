@@ -60,15 +60,16 @@ d3.csv('../data/scores.csv', (error, data) => {
   // calculate column length
   const tdLength = scores.length + 1;
   const columnLength = Math.ceil(tdLength / 3);
+  const lastColumnLength = scores.length % columnLength;
 
   let column_data = [];
-  const column_one_data = scores.slice(0,13);
-  const column_two_data = scores.slice(13,26);
-  const column_three_data = scores.slice(26,39);
+  const column_one_data = scores.slice(0,columnLength);
+  const column_two_data = scores.slice(columnLength,columnLength * 2);
+  const column_three_data = scores.slice(columnLength * 2,columnLength * 3);
 
   let rows = [];
   for (let i = 0; i < columnLength; i++) {
-    let row_data = [column_one_data[i][0], column_one_data[i][1], column_two_data[i][0], column_two_data[i][1], column_three_data[i] ? column_three_data[i][0] : 'N =', column_three_data[i] ? column_three_data[i][1] : `<span class="lineover">${d3.sum(scores, d => d[1])}</span>`];
+    let row_data = [column_one_data[i][0], column_one_data[i][1], column_two_data[i][0], column_two_data[i][1], column_three_data[i] ? column_three_data[i][0] : '', column_three_data[i] ? column_three_data[i][1] : ''];
     rows.push(row_data);
   }
 
@@ -77,5 +78,15 @@ d3.csv('../data/scores.csv', (error, data) => {
      d3.select('.container').append('div').attr('class', 'freq-table').html(str);
 
      new FrequencyDistTable('tbody', rows, 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 Colege Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
+
+  d3.select(`tbody tr:nth-child(${lastColumnLength + 1}) td:nth-child(5)`)
+      .attr('data-symbol', 'N')
+      .append('span')
+      .text('N=');
+
+  d3.select(`tbody tr:nth-child(${lastColumnLength + 1}) td:nth-child(6)`)
+      .append('span')
+      .attr('class', 'lineover')
+      .text(`${d3.sum(scores, d => d[1])}`);
   });
 });
