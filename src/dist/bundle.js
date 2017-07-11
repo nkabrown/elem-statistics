@@ -16942,94 +16942,119 @@ Object.defineProperty(exports, '__esModule', { value: true });
 "use strict";
 
 
-var _freqDistTable = __webpack_require__(2);
+var _frequencyDistData = __webpack_require__(2);
+
+(0, _frequencyDistData.frequencyData)();
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.frequencyData = undefined;
+
+var _FrequencyDistTable = __webpack_require__(3);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var d3 = __webpack_require__(0);
 
-d3.csv('../../data/scores.csv', function (error, data) {
-  if (error) throw error;
+/*
+ * Frequency Distribution Tables – How frequently is data distributed at each measure?
+ *
+ * The first column contains the measure ordered from highest to lowest, the second column contains the number of cases of that measure.
+ * Use the symbol N to represent the total number of cases in a group.
+ */
 
-  var maxValue = d3.max(data, function (d) {
-    return +d.score;
-  });
-  var minValue = d3.min(data, function (d) {
-    return +d.score;
-  });
-  // map range of scores to zero values in order from highest to lowest measure
-  var scores = new Map();
-  for (var i = maxValue; i >= minValue; i--) {
-    scores.set(i, 0);
-  }
+var frequencyData = exports.frequencyData = function frequencyData() {
+  d3.csv('../data/scores.csv', function (error, data) {
+    if (error) throw error;
 
-  // for every score in dataset increment map by one
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
-
-  try {
-    for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var d = _step.value;
-
-      var key = +d.score;
-      if (scores.has(key)) {
-        var val = scores.get(key);
-        val += 1;
-        scores.set(key, val);
-      }
+    var maxValue = d3.max(data, function (d) {
+      return +d.score;
+    });
+    var minValue = d3.min(data, function (d) {
+      return +d.score;
+    });
+    // map range of scores to zero values in order from highest to lowest measure
+    var scores = new Map();
+    for (var i = maxValue; i >= minValue; i--) {
+      scores.set(i, 0);
     }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
+
+    // for every score in dataset increment map by one
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
     try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
-        _iterator.return();
+      for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var d = _step.value;
+
+        var key = +d.score;
+        if (scores.has(key)) {
+          var val = scores.get(key);
+          val += 1;
+          scores.set(key, val);
+        }
       }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
     } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
       }
     }
-  }
 
-  ;
+    ;
 
-  // convert map to an array of pairs
-  scores = [].concat(_toConsumableArray(scores));
+    // convert map to an array of pairs
+    scores = [].concat(_toConsumableArray(scores));
 
-  // calculate column length
-  var tdLength = scores.length + 1;
-  var columnLength = Math.ceil(tdLength / 3);
-  var lastColumnLength = scores.length % columnLength;
+    // calculate column length
+    var tdLength = scores.length + 1;
+    var columnLength = Math.ceil(tdLength / 3);
+    var lastColumnLength = scores.length % columnLength;
 
-  var column_data = [];
-  var column_one_data = scores.slice(0, columnLength);
-  var column_two_data = scores.slice(columnLength, columnLength * 2);
-  var column_three_data = scores.slice(columnLength * 2, columnLength * 3);
+    var column_data = [];
+    var column_one_data = scores.slice(0, columnLength);
+    var column_two_data = scores.slice(columnLength, columnLength * 2);
+    var column_three_data = scores.slice(columnLength * 2, columnLength * 3);
 
-  var rows = [];
-  for (var _i = 0; _i < columnLength; _i++) {
-    var row_data = [column_one_data[_i][0], column_one_data[_i][1], column_two_data[_i][0], column_two_data[_i][1], column_three_data[_i] ? column_three_data[_i][0] : '', column_three_data[_i] ? column_three_data[_i][1] : ''];
-    rows.push(row_data);
-  }
+    var rows = [];
+    for (var _i = 0; _i < columnLength; _i++) {
+      var row_data = [column_one_data[_i][0], column_one_data[_i][1], column_two_data[_i][0], column_two_data[_i][1], column_three_data[_i] ? column_three_data[_i][0] : '', column_three_data[_i] ? column_three_data[_i][1] : ''];
+      rows.push(row_data);
+    }
 
-  d3.text('src/modal/frequencyTable.html', function (str) {
-    d3.select('.container').append('div').attr('class', 'freq-table').html(str);
+    d3.text('src/modal/frequencyTable.html', function (str) {
+      d3.select('.container').append('div').attr('class', 'freq-table').html(str);
 
-    new _freqDistTable.FrequencyDistTable('tbody', rows, 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 Colege Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
+      new _FrequencyDistTable.FrequencyDistTable('tbody', rows, 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 Colege Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
 
-    d3.select('tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(5)').attr('data-symbol', 'N').append('span').text('N=');
+      d3.select('tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(5)').attr('data-symbol', 'N').append('span').text('N=');
 
-    d3.select('tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(6)').append('span').attr('class', 'lineover').text('' + d3.sum(scores, function (d) {
-      return d[1];
-    }));
+      d3.select('tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(6)').append('span').attr('class', 'lineover').text('' + d3.sum(scores, function (d) {
+        return d[1];
+      }));
+    });
   });
-});
+};
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
