@@ -16944,7 +16944,9 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var _frequencyDistData = __webpack_require__(2);
 
-(0, _frequencyDistData.frequencyData)();
+var _memorySpanForDigits = __webpack_require__(4);
+
+(0, _memorySpanForDigits.memorySpan)();
 
 /***/ }),
 /* 2 */
@@ -17039,7 +17041,7 @@ var frequencyData = exports.frequencyData = function frequencyData() {
       rows.push(row_data);
     }
 
-    d3.text('src/modal/frequencyTable.html', function (str) {
+    d3.text('src/modal/table.html', function (str) {
       d3.select('.container').append('div').attr('class', 'freq-table').html(str);
 
       new _FrequencyDistTable.FrequencyDistTable('tbody', rows, 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 Colege Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
@@ -17101,6 +17103,73 @@ var FrequencyDistTable = exports.FrequencyDistTable = function () {
   }]);
 
   return FrequencyDistTable;
+}();
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.memorySpan = undefined;
+
+var _TwoGroupsTable = __webpack_require__(5);
+
+var d3 = __webpack_require__(0);
+
+var memorySpan = exports.memorySpan = function memorySpan() {
+  d3.csv('../data/memory-span.csv', function (error, data) {
+    if (error) throw error;
+
+    console.log(data);
+
+    d3.text('src/modal/table.html', function (str) {
+      d3.select('.container').append('div').attr('class', 'table').html(str);
+
+      new _TwoGroupsTable.TwoGroupsTable('tbody', {}, 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
+    });
+  });
+};
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var d3 = __webpack_require__(0);
+
+var TwoGroupsTable = exports.TwoGroupsTable = function () {
+  function TwoGroupsTable(el, d, c, a) {
+    _classCallCheck(this, TwoGroupsTable);
+
+    this.mount = el;
+    this.data = d;
+    this.caption = c;
+    this.attribution = a;
+  }
+
+  _createClass(TwoGroupsTable, [{
+    key: 'init',
+    value: function init() {
+      d3.select('figcaption').text(this.caption);
+    }
+  }]);
+
+  return TwoGroupsTable;
 }();
 
 /***/ })
