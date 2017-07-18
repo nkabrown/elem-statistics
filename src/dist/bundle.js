@@ -16947,6 +16947,7 @@ var _frequencyDistData = __webpack_require__(2);
 var _memorySpanForDigits = __webpack_require__(4);
 
 (0, _memorySpanForDigits.memorySpan)();
+(0, _frequencyDistData.frequencyData)();
 
 /***/ }),
 /* 2 */
@@ -17044,11 +17045,11 @@ var frequencyData = exports.frequencyData = function frequencyData() {
     d3.text('src/modal/table.html', function (str) {
       d3.select('.container').append('div').attr('class', 'freq-table').html(str);
 
-      new _FrequencyDistTable.FrequencyDistTable('tbody', rows, 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
+      new _FrequencyDistTable.FrequencyDistTable('.freq-table tbody', rows, '.freq-table', 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
 
-      d3.select('tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(5)').attr('data-symbol', 'N').append('span').text('N=');
+      d3.select('.freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(5)').attr('data-symbol', 'N').append('span').text('N=');
 
-      d3.select('tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(6)').append('span').attr('class', 'lineover').text('' + d3.sum(scores, function (d) {
+      d3.select('.freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(6)').append('span').attr('class', 'lineover').text('' + d3.sum(scores, function (d) {
         return d[1];
       }));
     });
@@ -17073,11 +17074,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var d3 = __webpack_require__(0);
 
 var FrequencyDistTable = exports.FrequencyDistTable = function () {
-  function FrequencyDistTable(el, d, m, c, a) {
+  function FrequencyDistTable(el, d, i, m, c, a) {
     _classCallCheck(this, FrequencyDistTable);
 
     this.mount = el;
     this.data = d;
+    this.identity = i;
     this.measure = m;
     this.caption = c;
     this.attribution = a;
@@ -17086,15 +17088,15 @@ var FrequencyDistTable = exports.FrequencyDistTable = function () {
   _createClass(FrequencyDistTable, [{
     key: 'init',
     value: function init() {
-      d3.select('figcaption').text(this.caption);
+      d3.select(this.identity + ' figcaption').text(this.caption);
 
-      d3.select('thead').html('<tr><th>' + this.measure + '</th><th>&#402;</th><th>' + this.measure + '</th><th>&#402;</th><th>' + this.measure + '</th><th>&#402;</th></tr>');
+      d3.select(this.identity + ' thead').html('<tr><th>' + this.measure + '</th><th>&#402;</th><th>' + this.measure + '</th><th>&#402;</th><th>' + this.measure + '</th><th>&#402;</th></tr>');
 
       d3.select(this.mount).selectAll('.row').data(this.data).enter().append('tr').attr('class', 'row').html(function (d) {
         return '<td>' + d[0] + '</td><td>' + d[1] + '</td><td>' + d[2] + '</td><td>' + d[3] + '</td><td>' + d[4] + '</td><td>' + d[5] + '</td>';
       });
 
-      d3.select('small').text(this.attribution);
+      d3.select(this.identity + ' small').text(this.attribution);
     }
   }]);
 
@@ -17126,7 +17128,7 @@ var memorySpan = exports.memorySpan = function memorySpan() {
     d3.text('src/modal/table.html', function (str) {
       d3.select('.container').append('div').attr('class', 'table').html(str);
 
-      new _TwoGroupsTable.TwoGroupsTable('tbody', data, 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
+      new _TwoGroupsTable.TwoGroupsTable('.table tbody', data, '.table', 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
     });
   });
 };
@@ -17151,11 +17153,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var d3 = __webpack_require__(0);
 
 var TwoGroupsTable = exports.TwoGroupsTable = function () {
-  function TwoGroupsTable(el, d, c, a) {
+  function TwoGroupsTable(el, d, i, c, a) {
     _classCallCheck(this, TwoGroupsTable);
 
     this.mount = el;
     this.data = d;
+    this.identity = i;
     this.caption = c;
     this.attribution = a;
   }
@@ -17163,14 +17166,14 @@ var TwoGroupsTable = exports.TwoGroupsTable = function () {
   _createClass(TwoGroupsTable, [{
     key: 'init',
     value: function init() {
-      d3.select('figcaption').text(this.caption);
+      d3.select(this.identity + ' figcaption').text(this.caption);
 
       // get a collection of unique property values
       var groups = [].concat(_toConsumableArray(new Set(this.data.map(function (d) {
         return d.group;
       }))));
 
-      d3.select('thead').html('<tr><th>' + groups[0].toUpperCase() + ' GROUP</th><th>' + groups[1].toUpperCase() + ' GROUP</th></tr>');
+      d3.select(this.identity + ' thead').html('<tr><th>' + groups[0].toUpperCase() + ' GROUP</th><th>' + groups[1].toUpperCase() + ' GROUP</th></tr>');
     }
   }]);
 
