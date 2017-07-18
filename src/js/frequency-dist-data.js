@@ -49,7 +49,7 @@ export const frequencyData = () => {
       rows.push(row_data);
     }
 
-    d3.text('src/modal/table.html', str => {
+    d3.text('src/template/table.html', str => {
       d3.select('.container').append('div').attr('id', 'freq-table').html(str);
 
       new FrequencyDistTable('#freq-table tbody', rows, '#freq-table', 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
