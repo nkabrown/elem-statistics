@@ -15,7 +15,7 @@ export class FrequencyDistTable {
        .text(this.caption);
 
     d3.select('thead')
-       .html(d => `<tr><th>${this.measure}</th><th>&#402;</th><th>${this.measure}</th><th>&#402;</th><th>${this.measure}</th><th>&#402;</th></tr>`);
+       .html(`<tr><th>${this.measure}</th><th>&#402;</th><th>${this.measure}</th><th>&#402;</th><th>${this.measure}</th><th>&#402;</th></tr>`);
 
     d3.select(this.mount)
        .selectAll('.row')

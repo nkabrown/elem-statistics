@@ -17044,7 +17044,7 @@ var frequencyData = exports.frequencyData = function frequencyData() {
     d3.text('src/modal/table.html', function (str) {
       d3.select('.container').append('div').attr('class', 'freq-table').html(str);
 
-      new _FrequencyDistTable.FrequencyDistTable('tbody', rows, 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 Colege Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
+      new _FrequencyDistTable.FrequencyDistTable('tbody', rows, 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
 
       d3.select('tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(5)').attr('data-symbol', 'N').append('span').text('N=');
 
@@ -17086,13 +17086,9 @@ var FrequencyDistTable = exports.FrequencyDistTable = function () {
   _createClass(FrequencyDistTable, [{
     key: 'init',
     value: function init() {
-      var _this = this;
-
       d3.select('figcaption').text(this.caption);
 
-      d3.select('thead').html(function (d) {
-        return '<tr><th>' + _this.measure + '</th><th>&#402;</th><th>' + _this.measure + '</th><th>&#402;</th><th>' + _this.measure + '</th><th>&#402;</th></tr>';
-      });
+      d3.select('thead').html('<tr><th>' + this.measure + '</th><th>&#402;</th><th>' + this.measure + '</th><th>&#402;</th><th>' + this.measure + '</th><th>&#402;</th></tr>');
 
       d3.select(this.mount).selectAll('.row').data(this.data).enter().append('tr').attr('class', 'row').html(function (d) {
         return '<td>' + d[0] + '</td><td>' + d[1] + '</td><td>' + d[2] + '</td><td>' + d[3] + '</td><td>' + d[4] + '</td><td>' + d[5] + '</td>';
@@ -17130,7 +17126,7 @@ var memorySpan = exports.memorySpan = function memorySpan() {
     d3.text('src/modal/table.html', function (str) {
       d3.select('.container').append('div').attr('class', 'table').html(str);
 
-      new _TwoGroupsTable.TwoGroupsTable('tbody', {}, 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
+      new _TwoGroupsTable.TwoGroupsTable('tbody', data, 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
     });
   });
 };
@@ -17147,6 +17143,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -17166,6 +17164,13 @@ var TwoGroupsTable = exports.TwoGroupsTable = function () {
     key: 'init',
     value: function init() {
       d3.select('figcaption').text(this.caption);
+
+      // get a collection of unique property values
+      var groups = [].concat(_toConsumableArray(new Set(this.data.map(function (d) {
+        return d.group;
+      }))));
+
+      d3.select('thead').html('<tr><th>' + groups[0].toUpperCase() + ' GROUP</th><th>' + groups[1].toUpperCase() + ' GROUP</th></tr>');
     }
   }]);
 

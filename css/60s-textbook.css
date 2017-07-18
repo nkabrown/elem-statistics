@@ -4,7 +4,7 @@ body {
 }
 
 figure {
-  width: 400px;
+  width: 490px;
 }
 
 figcaption {
@@ -45,7 +45,7 @@ td:nth-child(even) {
 
 th:nth-child(odd),
 td:nth-child(odd) {
-  padding-left: 25px;
+  padding-left: 40px;
 }
 
 td[data-symbol='N'] {
