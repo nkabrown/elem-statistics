@@ -17043,13 +17043,13 @@ var frequencyData = exports.frequencyData = function frequencyData() {
     }
 
     d3.text('src/modal/table.html', function (str) {
-      d3.select('.container').append('div').attr('class', 'freq-table').html(str);
+      d3.select('.container').append('div').attr('id', 'freq-table').html(str);
 
-      new _FrequencyDistTable.FrequencyDistTable('.freq-table tbody', rows, '.freq-table', 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
+      new _FrequencyDistTable.FrequencyDistTable('#freq-table tbody', rows, '#freq-table', 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
 
-      d3.select('.freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(5)').attr('data-symbol', 'N').append('span').text('N=');
+      d3.select('#freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(5)').attr('data-symbol', 'N').append('span').text('N=');
 
-      d3.select('.freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(6)').append('span').attr('class', 'lineover').text('' + d3.sum(scores, function (d) {
+      d3.select('#freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(6)').append('span').attr('class', 'lineover').text('' + d3.sum(scores, function (d) {
         return d[1];
       }));
     });
@@ -17126,9 +17126,9 @@ var memorySpan = exports.memorySpan = function memorySpan() {
     console.log(data);
 
     d3.text('src/modal/table.html', function (str) {
-      d3.select('.container').append('div').attr('class', 'table').html(str);
+      d3.select('.container').append('div').attr('id', 'table').html(str);
 
-      new _TwoGroupsTable.TwoGroupsTable('.table tbody', data, '.table', 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
+      new _TwoGroupsTable.TwoGroupsTable('#table tbody', data, '#table', 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
     });
   });
 };

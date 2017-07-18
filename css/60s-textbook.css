@@ -71,3 +71,7 @@ small {
   white-space: pre;
   font-size: 9px;
 }
+
+#table th {
+  width: 175px;
+}
