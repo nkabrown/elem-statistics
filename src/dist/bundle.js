@@ -17031,7 +17031,6 @@ var frequencyData = exports.frequencyData = function frequencyData() {
     var columnLength = Math.ceil(tdLength / 3);
     var lastColumnLength = scores.length % columnLength;
 
-    var column_data = [];
     var column_one_data = scores.slice(0, columnLength);
     var column_two_data = scores.slice(columnLength, columnLength * 2);
     var column_three_data = scores.slice(columnLength * 2, columnLength * 3);
@@ -17123,8 +17122,6 @@ var memorySpan = exports.memorySpan = function memorySpan() {
   d3.csv('../data/memory-span.csv', function (error, data) {
     if (error) throw error;
 
-    console.log(data);
-
     d3.text('src/modal/table.html', function (str) {
       d3.select('.container').append('div').attr('id', 'table').html(str);
 
@@ -17173,7 +17170,29 @@ var TwoGroupsTable = exports.TwoGroupsTable = function () {
         return d.group;
       }))));
 
-      d3.select(this.identity + ' thead').html('<tr><th>' + groups[0].toUpperCase() + ' GROUP</th><th>' + groups[1].toUpperCase() + ' GROUP</th></tr>');
+      // calculate column length
+      var tdLength = this.data.length;;
+      var columnLength = Math.ceil(tdLength / 4);
+
+      var column_one_data = this.data.slice(0, columnLength);
+      var column_two_data = this.data.slice(columnLength, columnLength * 2);
+      var column_three_data = this.data.slice(columnLength * 2, columnLength * 3);
+      var column_four_data = this.data.slice(columnLength * 3);
+      console.log(column_four_data);
+
+      var rows = [];
+      for (var i = 0; i < columnLength; i++) {
+        var row_data = [column_one_data[i].score, column_two_data[i].score, column_three_data[i].score, column_four_data[i].score];
+        rows[rows.length] = row_data;
+      }
+
+      d3.select(this.identity + ' thead').html('<tr><th colspan="2">' + groups[0].toUpperCase() + ' GROUP</th><th></th><th colspan="2">' + groups[1].toUpperCase() + ' GROUP</th></tr>');
+
+      d3.select(this.mount).selectAll('.row').data(rows).enter().append('tr').attr('class', 'row').html(function (d) {
+        return '<td>' + d[0] + '</td><td>' + d[1] + '</td><td></td><td>' + d[2] + '</td><td>' + d[3] + '</td>';
+      });
+
+      d3.select(this.identity + ' small').text(this.attribution);
     }
   }]);
 

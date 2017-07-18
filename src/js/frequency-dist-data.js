@@ -39,7 +39,6 @@ export const frequencyData = () => {
     const columnLength = Math.ceil(tdLength / 3);
     const lastColumnLength = scores.length % columnLength;
 
-    let column_data = [];
     const column_one_data = scores.slice(0,columnLength);
     const column_two_data = scores.slice(columnLength,columnLength * 2);
     const column_three_data = scores.slice(columnLength * 2,columnLength * 3);

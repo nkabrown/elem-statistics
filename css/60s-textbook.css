@@ -37,14 +37,14 @@ td {
   font-size: 13px;
 }
 
-th:nth-child(even),
-td:nth-child(even) {
+#freq-table th:nth-child(even),
+#freq-table td:nth-child(even) {
   text-align: right;
   padding-right: 40px;
 }
 
-th:nth-child(odd),
-td:nth-child(odd) {
+#freq-table th:nth-child(odd),
+#freq-table td:nth-child(odd) {
   padding-left: 40px;
 }
 
@@ -74,4 +74,16 @@ small {
 
 #table th {
   width: 175px;
+  padding-left: 15px;
+}
+
+#table tr td {
+  width: 20%;
+  padding: 0;
+  padding-right: 0;
+}
+
+#table td:nth-child(3) {
+  padding-right: 75px;
+  padding-left: 75px;
 }
