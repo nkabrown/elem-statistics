@@ -25,7 +25,6 @@ export class TwoGroupsTable {
     const column_two_data = this.data.slice(columnLength, columnLength * 2);
     const column_three_data = this.data.slice(columnLength * 2, columnLength * 3);
     const column_four_data = this.data.slice(columnLength * 3);
-    console.log(column_four_data);
 
     let rows = [];
     for (let i = 0; i < columnLength; i++) {
