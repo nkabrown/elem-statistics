@@ -1,7 +1,7 @@
 'use strict';
 import { calculateColumns, rangeOfMeasures } from './data-helpers';
 import { FrequencyDistTable } from './FrequencyDistTable';
-const d3 = require('d3');
+const d3 = require('./d3.min.js');
 
 /*
  * Frequency Distribution Tables – How frequently is data distributed at each measure?

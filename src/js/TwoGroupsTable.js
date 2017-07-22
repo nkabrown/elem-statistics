@@ -1,5 +1,5 @@
 'use strict';
-const d3 = require('d3');
+const d3 = require('./d3.min.js');
 
 export class TwoGroupsTable {
   constructor(el, d, i, c, a) {

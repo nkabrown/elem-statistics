@@ -1,6 +1,6 @@
 'use strict';
 import { TwoGroupsTable } from './TwoGroupsTable';
-const d3 = require('d3');
+const d3 = require('./d3.min.js');
 
 export const memorySpan = () => {
   d3.csv('../data/memory-span.csv', (error, data) => {

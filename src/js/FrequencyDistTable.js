@@ -1,5 +1,5 @@
 'use strict';
-const d3 = require('d3');
+const d3 = require('./d3.min.js');
 
 export class FrequencyDistTable {
   constructor(el, d, i, m, c, a) {
