@@ -17,20 +17,7 @@ export class TwoGroupsTable {
     // get a collection of unique property values
     const groups  = [...new Set(this.data.map(d => d.group))];
 
-    // calculate column length
-    const tdLength = this.data.length;;
-    const columnLength = Math.ceil(tdLength / 4);
-
-    const column_one_data = this.data.slice(0, columnLength);
-    const column_two_data = this.data.slice(columnLength, columnLength * 2);
-    const column_three_data = this.data.slice(columnLength * 2, columnLength * 3);
-    const column_four_data = this.data.slice(columnLength * 3);
-
-    let rows = [];
-    for (let i = 0; i < columnLength; i++) {
-      let row_data = [column_one_data[i].score, column_two_data[i].score, column_three_data[i].score, column_four_data[i].score];
-      rows[rows.length] = row_data;
-    }
+    const rows = this.createRowData(this.createColumns());
 
     d3.select(`${this.identity} thead`)
        .html(`<tr><th colspan="2">${groups[0].toUpperCase()} GROUP</th><th></th><th colspan="2">${groups[1].toUpperCase()} GROUP</th></tr>`);
@@ -44,5 +31,27 @@ export class TwoGroupsTable {
 
     d3.select(`${this.identity} small`)
         .text(this.attribution);
+  }
+
+  createColumns() {
+    // calculate column length
+    const tdLength = this.data.length;;
+    const columnLength = Math.ceil(tdLength / 4);
+
+    let columns = [columnLength];
+    columns.push(this.data.slice(0, columnLength));
+    columns.push(this.data.slice(columnLength, columnLength * 2));
+    columns.push(this.data.slice(columnLength * 2, columnLength * 3));
+    columns.push(this.data.slice(columnLength * 3));
+    return columns;
+  }
+
+  createRowData(columns) {
+    let rows = [];
+    for (let i = 0; i < columns[0]; i++) {
+      let row_data = [columns[1][i].score, columns[2][i].score, columns[3][i].score, columns[4][i].score];
+      rows[rows.length] = row_data;
+    }
+    return rows;
   }
 }

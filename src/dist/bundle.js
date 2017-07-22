@@ -755,7 +755,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _frequencyDistData = __webpack_require__(2);
 
-var _memorySpanForDigits = __webpack_require__(5);
+var _memorySpanForDigits = __webpack_require__(4);
 
 (0, _memorySpanForDigits.memorySpan)();
 (0, _frequencyDistData.frequencyData)();
@@ -772,9 +772,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.frequencyData = undefined;
 
-var _dataHelpers = __webpack_require__(3);
-
-var _FrequencyDistTable = __webpack_require__(4);
+var _FrequencyDistTable = __webpack_require__(3);
 
 var d3 = __webpack_require__(0);
 
@@ -789,28 +787,10 @@ var frequencyData = exports.frequencyData = function frequencyData() {
   d3.csv('../data/scores.csv', function (error, data) {
     if (error) throw error;
 
-    var maxValue = d3.max(data, function (d) {
-      return +d.score;
-    });
-    var minValue = d3.min(data, function (d) {
-      return +d.score;
-    });
-
-    var scores = (0, _dataHelpers.rangeOfMeasures)(data, maxValue, minValue, 'score');
-    var row_data = (0, _dataHelpers.calculateColumns)(scores);
-    var rows = row_data[0];
-    var lastColumnLength = row_data[1];
-
     d3.text('src/template/table.html', function (str) {
       d3.select('.container').append('div').attr('id', 'freq-table').html(str);
 
-      new _FrequencyDistTable.FrequencyDistTable('#freq-table tbody', rows, '#freq-table', 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
-
-      d3.select('#freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(5)').attr('data-symbol', 'N').append('span').text('N=');
-
-      d3.select('#freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(6)').append('span').attr('class', 'lineover').text('' + d3.sum(scores, function (d) {
-        return d[1];
-      }));
+      new _FrequencyDistTable.FrequencyDistTable('#freq-table tbody', data, '#freq-table', 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
     });
   });
 };
@@ -826,84 +806,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-var rangeOfMeasures = exports.rangeOfMeasures = function rangeOfMeasures(data, max, min, measure) {
-  // map range of measures to zero values in order from highest to lowest measure
-  var scores = new Map();
-  for (var i = max; i >= min; i--) {
-    scores.set(i, 0);
-  }
-
-  // for every instance of measure in dataset increment map by one
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
-
-  try {
-    for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var d = _step.value;
-
-      var key = +d[measure];
-      if (scores.has(key)) {
-        var val = scores.get(key);
-        val += 1;
-        scores.set(key, val);
-      }
-    }
-
-    // convert map to an array of pairs
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
-        _iterator.return();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
-    }
-  }
-
-  scores = [].concat(_toConsumableArray(scores));
-  return scores;
-};
-
-var calculateColumns = exports.calculateColumns = function calculateColumns(data) {
-  // calculate column length
-  var tdLength = data.length + 1;
-  var columnLength = Math.ceil(tdLength / 3);
-  var lastColumnLength = data.length % columnLength;
-
-  var column_one_data = data.slice(0, columnLength);
-  var column_two_data = data.slice(columnLength, columnLength * 2);
-  var column_three_data = data.slice(columnLength * 2, columnLength * 3);
-
-  // create a 2-dimensional array of table data
-  var rows = [];
-  for (var i = 0; i < columnLength; i++) {
-    var row_data = [column_one_data[i][0], column_one_data[i][1], column_two_data[i][0], column_two_data[i][1], column_three_data[i] ? column_three_data[i][0] : '', column_three_data[i] ? column_three_data[i][1] : ''];
-    rows.push(row_data);
-  }
-
-  return [rows, lastColumnLength];
-};
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -916,7 +821,7 @@ var FrequencyDistTable = exports.FrequencyDistTable = function () {
     this.mount = el;
     this.data = d;
     this.identity = i;
-    this.measure = m;
+    this.measure = m.toLowerCase();
     this.caption = c;
     this.attribution = a;
   }
@@ -928,11 +833,98 @@ var FrequencyDistTable = exports.FrequencyDistTable = function () {
 
       d3.select(this.identity + ' thead').html('<tr><th>' + this.measure + '</th><th>&#402;</th><th>' + this.measure + '</th><th>&#402;</th><th>' + this.measure + '</th><th>&#402;</th></tr>');
 
-      d3.select(this.mount).selectAll('.row').data(this.data).enter().append('tr').attr('class', 'row').html(function (d) {
+      var maxValue = d3.max(this.data, function (d) {
+        return +d.score;
+      });
+      var minValue = d3.min(this.data, function (d) {
+        return +d.score;
+      });
+
+      var scores = this.rangeOfMeasures(maxValue, minValue);
+      var row_data = this.createRowData(this.createColumns(scores));
+      var rows = row_data[0];
+      var lastColumnLength = row_data[1];
+
+      d3.select(this.mount).selectAll('.row').data(rows).enter().append('tr').attr('class', 'row').html(function (d) {
         return '<td>' + d[0] + '</td><td>' + d[1] + '</td><td>' + d[2] + '</td><td>' + d[3] + '</td><td>' + d[4] + '</td><td>' + d[5] + '</td>';
       });
 
       d3.select(this.identity + ' small').text(this.attribution);
+
+      d3.select('#freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(5)').attr('data-symbol', 'N').append('span').text('N=');
+
+      d3.select('#freq-table tbody tr:nth-child(' + (lastColumnLength + 1) + ') td:nth-child(6)').append('span').attr('class', 'lineover').text('' + d3.sum(scores, function (d) {
+        return d[1];
+      }));
+    }
+  }, {
+    key: 'rangeOfMeasures',
+    value: function rangeOfMeasures(max, min) {
+      // map range of measures to zero values in order from highest to lowest measure
+      var scores = new Map();
+      for (var i = max; i >= min; i--) {
+        scores.set(i, 0);
+      }
+
+      // for every instance of measure in dataset increment map by one
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var d = _step.value;
+
+          var key = +d[this.measure];
+          if (scores.has(key)) {
+            var val = scores.get(key);
+            val += 1;
+            scores.set(key, val);
+          }
+        }
+
+        // convert map to an array of pairs
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      scores = [].concat(_toConsumableArray(scores));
+      return scores;
+    }
+  }, {
+    key: 'createColumns',
+    value: function createColumns(data) {
+      // calculate column length
+      var tdLength = data.length + 1;
+      var columnLength = Math.ceil(tdLength / 3);
+      var lastColumnLength = data.length % columnLength;
+
+      var columns = [lastColumnLength, columnLength];
+      columns.push(data.slice(0, columnLength));
+      columns.push(data.slice(columnLength, columnLength * 2));
+      columns.push(data.slice(columnLength * 2, columnLength * 3));
+      return columns;
+    }
+  }, {
+    key: 'createRowData',
+    value: function createRowData(columns) {
+      var rows = [];
+      for (var i = 0; i < columns[1]; i++) {
+        var row_data = [columns[2][i][0], columns[2][i][1], columns[3][i][0], columns[3][i][1], columns[4][i] ? columns[4][i][0] : '', columns[4][i] ? columns[4][i][1] : ''];
+        rows.push(row_data);
+      }
+      return [rows, columns[0]];
     }
   }]);
 
@@ -940,7 +932,7 @@ var FrequencyDistTable = exports.FrequencyDistTable = function () {
 }();
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -951,7 +943,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.memorySpan = undefined;
 
-var _TwoGroupsTable = __webpack_require__(6);
+var _TwoGroupsTable = __webpack_require__(5);
 
 var d3 = __webpack_require__(0);
 
@@ -968,7 +960,7 @@ var memorySpan = exports.memorySpan = function memorySpan() {
 };
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1007,20 +999,7 @@ var TwoGroupsTable = exports.TwoGroupsTable = function () {
         return d.group;
       }))));
 
-      // calculate column length
-      var tdLength = this.data.length;;
-      var columnLength = Math.ceil(tdLength / 4);
-
-      var column_one_data = this.data.slice(0, columnLength);
-      var column_two_data = this.data.slice(columnLength, columnLength * 2);
-      var column_three_data = this.data.slice(columnLength * 2, columnLength * 3);
-      var column_four_data = this.data.slice(columnLength * 3);
-
-      var rows = [];
-      for (var i = 0; i < columnLength; i++) {
-        var row_data = [column_one_data[i].score, column_two_data[i].score, column_three_data[i].score, column_four_data[i].score];
-        rows[rows.length] = row_data;
-      }
+      var rows = this.createRowData(this.createColumns());
 
       d3.select(this.identity + ' thead').html('<tr><th colspan="2">' + groups[0].toUpperCase() + ' GROUP</th><th></th><th colspan="2">' + groups[1].toUpperCase() + ' GROUP</th></tr>');
 
@@ -1029,6 +1008,30 @@ var TwoGroupsTable = exports.TwoGroupsTable = function () {
       });
 
       d3.select(this.identity + ' small').text(this.attribution);
+    }
+  }, {
+    key: 'createColumns',
+    value: function createColumns() {
+      // calculate column length
+      var tdLength = this.data.length;;
+      var columnLength = Math.ceil(tdLength / 4);
+
+      var columns = [columnLength];
+      columns.push(this.data.slice(0, columnLength));
+      columns.push(this.data.slice(columnLength, columnLength * 2));
+      columns.push(this.data.slice(columnLength * 2, columnLength * 3));
+      columns.push(this.data.slice(columnLength * 3));
+      return columns;
+    }
+  }, {
+    key: 'createRowData',
+    value: function createRowData(columns) {
+      var rows = [];
+      for (var i = 0; i < columns[0]; i++) {
+        var row_data = [columns[1][i].score, columns[2][i].score, columns[3][i].score, columns[4][i].score];
+        rows[rows.length] = row_data;
+      }
+      return rows;
     }
   }]);
 
