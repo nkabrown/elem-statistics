@@ -87,3 +87,25 @@ small {
   padding-right: 75px;
   padding-left: 75px;
 }
+
+.x-axis line,
+.x-axis path,
+.y-axis line,
+.y-axis path {
+  display: none;
+}
+
+.x-axis .tick line,
+.y-axis .tick line {
+  display: block;
+  stroke: #fff;
+}
+
+.x-axis .tick text,
+.y-axis .tick text {
+  font-family: "Stymie", "Baskerville", serif;
+}
+
+rect.polygon-background {
+  fill: rgba(153,153,153,0.8);
+}
