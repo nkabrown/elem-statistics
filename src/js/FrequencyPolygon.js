@@ -2,7 +2,7 @@
 const d3 = require('./d3.min.js');
 
 export class FrequencyPolygon {
-  constructor(el, d, i, m, w, h, c) {
+  constructor(el, d, i, m, w, h, c, a) {
     this.mount = el;
     this.data = d;
     this.identity = i;
@@ -10,6 +10,7 @@ export class FrequencyPolygon {
     this.width = w - this.margin.right - this.margin.left;
     this.height = h - this.margin.bottom - this.margin.top;
     this.caption = c;
+    this.attribution = a;
   }
 
   init() {
@@ -17,7 +18,6 @@ export class FrequencyPolygon {
         .text(this.caption);
 
     const graph = d3.select(this.mount)
-        .append('svg')
         .attr('width', this.width + this.margin.right + this.margin.left)
         .attr('height', this.height + this.margin.bottom + this.margin.top)
       .append('g')
@@ -43,7 +43,7 @@ export class FrequencyPolygon {
         .ticks(4)
         .tickSize(-this.width - 50);
 
-    x.domain([d3.min(this.data, d => d.midpoint) - 5, d3.max(this.data, d => d.midpoint) + 5]);
+    x.domain([d3.min(this.data, d => d.midpoint), d3.max(this.data, d => d.midpoint)]);
     y.domain([0, 20]);
 
     graph.append('g')
@@ -63,5 +63,10 @@ export class FrequencyPolygon {
     const line = d3.line()
        .x(d => x(d.midpoint))
        .y(d => y(d.percent));
+
+    console.log(d3.select(`${this.identity} small`));
+
+    d3.select(`${this.identity} small`)
+        .text(this.attribution);
   }
 }

@@ -2082,160 +2082,53 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 "use strict";
 
 
-var _engineeringInterest = __webpack_require__(2);
-
-var _frequencyDistData = __webpack_require__(4);
-
-var _memorySpanForDigits = __webpack_require__(6);
-
-(0, _memorySpanForDigits.memorySpan)();
-(0, _frequencyDistData.frequencyData)();
-(0, _engineeringInterest.engineeringInterest)();
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.engineeringInterest = undefined;
+var _FrequencyDistTable = __webpack_require__(2);
 
 var _FrequencyPolygon = __webpack_require__(3);
 
+var _TwoGroupsTable = __webpack_require__(4);
+
 var d3 = __webpack_require__(0);
 
-var engineeringInterest = exports.engineeringInterest = function engineeringInterest() {
-  d3.csv('../data/engineering-interest.csv', function (error, data) {
+var dataGenerator = function dataGenerator(mount, dataPath, template, caseName) {
+  d3.csv(dataPath, function (error, data) {
     if (error) throw error;
-    console.log(data);
-    data.forEach(function (d) {
-      d.midpoint = +d.midpoint;
-      d.percent = +d.percent;
-    });
 
-    d3.text('src/template/graph.html', function (str) {
-      d3.select('.container').append('div').attr('id', 'freq-polygon').html(str);
+    d3.text(template, function (str) {
+      d3.select('.container').append('div').attr('id', mount).html(str);
 
-      new _FrequencyPolygon.FrequencyPolygon('#freq-polygon figure', data, '#freq-polygon', { top: 20, right: 20, bottom: 20, left: 45 }, 375, 225, '').init();
-    });
-  });
-};
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var d3 = __webpack_require__(0);
-
-var FrequencyPolygon = exports.FrequencyPolygon = function () {
-    function FrequencyPolygon(el, d, i, m, w, h, c) {
-        _classCallCheck(this, FrequencyPolygon);
-
-        this.mount = el;
-        this.data = d;
-        this.identity = i;
-        this.margin = m;
-        this.width = w - this.margin.right - this.margin.left;
-        this.height = h - this.margin.bottom - this.margin.top;
-        this.caption = c;
-    }
-
-    _createClass(FrequencyPolygon, [{
-        key: 'init',
-        value: function init() {
-            d3.select(this.identity + ' figcaption').text(this.caption);
-
-            var graph = d3.select(this.mount).append('svg').attr('width', this.width + this.margin.right + this.margin.left).attr('height', this.height + this.margin.bottom + this.margin.top).append('g').attr('transform', 'translate(' + this.margin.left + ', ' + this.margin.top + ')');
-
-            graph.append('rect').attr('class', 'polygon-background').attr('width', this.width + this.margin.right + this.margin.left - 11.5).attr('height', this.height).attr('transform', 'translate(0, 0)');
-
-            var x = d3.scaleLinear().range([0, this.width]);
-
-            var y = d3.scaleLinear().range([this.height, 0]);
-
-            var xAxis = d3.axisBottom(x).ticks(16).tickSize(-this.height - 50);
-
-            var yAxis = d3.axisLeft(y).ticks(4).tickSize(-this.width - 50);
-
-            x.domain([d3.min(this.data, function (d) {
-                return d.midpoint;
-            }) - 5, d3.max(this.data, function (d) {
-                return d.midpoint;
-            }) + 5]);
-            y.domain([0, 20]);
-
-            graph.append('g').attr('class', 'x-axis').attr('transform', 'translate(0, ' + this.height + ')').call(xAxis);
-
-            graph.append('g').attr('class', 'y-axis').call(yAxis);
-
-            var firstXAxis = d3.selectAll('.x-axis .tick').nodes()[0];
-            d3.select(firstXAxis).attr('visibility', 'hidden');
-            var firstYAxis = d3.selectAll('.y-axis .tick').nodes()[0];
-            d3.select(firstYAxis).attr('visibility', 'hidden');
-
-            var line = d3.line().x(function (d) {
-                return x(d.midpoint);
-            }).y(function (d) {
-                return y(d.percent);
-            });
+      switchcaseF({
+        'FREQ-DIST': function FREQDIST() {
+          return new _FrequencyDistTable.FrequencyDistTable('#freq-table tbody', data, '#freq-table', 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
+        },
+        'TWO-GROUPS': function TWOGROUPS() {
+          return new _TwoGroupsTable.TwoGroupsTable('#table tbody', data, '#table', 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
+        },
+        'FREQ-POLY': function FREQPOLY() {
+          return new _FrequencyPolygon.FrequencyPolygon('#freq-polygon svg', data, '#freq-polygon', { top: 20, right: 20, bottom: 20, left: 45 }, 375, 225, '', 'Strong, E. K., Jr. Nineteen-year followup of engineer interests. J. appl. Psychol., 1952, 36, 65-74.').init();
         }
-    }]);
-
-    return FrequencyPolygon;
-}();
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.frequencyData = undefined;
-
-var _FrequencyDistTable = __webpack_require__(5);
-
-var d3 = __webpack_require__(0);
-
-/*
- * Frequency Distribution Tables – How frequently is data distributed at each measure?
- *
- * The first column contains the measure ordered from highest to lowest, the second column contains the number of cases of that measure.
- * Use the symbol N to represent the total number of cases in a group.
- */
-
-var frequencyData = exports.frequencyData = function frequencyData() {
-  d3.csv('../data/scores.csv', function (error, data) {
-    if (error) throw error;
-
-    d3.text('src/template/table.html', function (str) {
-      d3.select('.container').append('div').attr('id', 'freq-table').html(str);
-
-      new _FrequencyDistTable.FrequencyDistTable('#freq-table tbody', data, '#freq-table', 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init();
+      })(caseName);
     });
   });
 };
 
+dataGenerator('table', '../data/memory-span.csv', 'src/template/table.html', 'TWO-GROUPS');
+dataGenerator('freq-table', '../data/scores.csv', 'src/template/table.html', 'FREQ-DIST');
+
+var switchcase = function switchcase(cases) {
+  return function (key) {
+    return key in cases ? cases[key] : null;
+  };
+};
+
+var switchcaseF = function switchcaseF(cases) {
+  return function (key) {
+    return switchcase(cases)(key)();
+  };
+};
+
 /***/ }),
-/* 5 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2252,6 +2145,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var d3 = __webpack_require__(0);
+
+/*
+ * Frequency Distribution Tables – How frequently is data distributed at each measure?
+ *
+ * The first column contains the measure ordered from highest to lowest, the second column contains the number of cases of that measure.
+ * Use the symbol N to represent the total number of cases in a group.
+ */
 
 var FrequencyDistTable = exports.FrequencyDistTable = function () {
   function FrequencyDistTable(el, d, i, m, c, a) {
@@ -2371,35 +2271,86 @@ var FrequencyDistTable = exports.FrequencyDistTable = function () {
 }();
 
 /***/ }),
-/* 6 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-exports.memorySpan = undefined;
 
-var _TwoGroupsTable = __webpack_require__(7);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var d3 = __webpack_require__(0);
 
-var memorySpan = exports.memorySpan = function memorySpan() {
-  d3.csv('../data/memory-span.csv', function (error, data) {
-    if (error) throw error;
+var FrequencyPolygon = exports.FrequencyPolygon = function () {
+    function FrequencyPolygon(el, d, i, m, w, h, c, a) {
+        _classCallCheck(this, FrequencyPolygon);
 
-    d3.text('src/template/table.html', function (str) {
-      d3.select('.container').append('div').attr('id', 'table').html(str);
+        this.mount = el;
+        this.data = d;
+        this.identity = i;
+        this.margin = m;
+        this.width = w - this.margin.right - this.margin.left;
+        this.height = h - this.margin.bottom - this.margin.top;
+        this.caption = c;
+        this.attribution = a;
+    }
 
-      new _TwoGroupsTable.TwoGroupsTable('#table tbody', data, '#table', 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
-    });
-  });
-};
+    _createClass(FrequencyPolygon, [{
+        key: 'init',
+        value: function init() {
+            d3.select(this.identity + ' figcaption').text(this.caption);
+
+            var graph = d3.select(this.mount).attr('width', this.width + this.margin.right + this.margin.left).attr('height', this.height + this.margin.bottom + this.margin.top).append('g').attr('transform', 'translate(' + this.margin.left + ', ' + this.margin.top + ')');
+
+            graph.append('rect').attr('class', 'polygon-background').attr('width', this.width + this.margin.right + this.margin.left - 11.5).attr('height', this.height).attr('transform', 'translate(0, 0)');
+
+            var x = d3.scaleLinear().range([0, this.width]);
+
+            var y = d3.scaleLinear().range([this.height, 0]);
+
+            var xAxis = d3.axisBottom(x).ticks(16).tickSize(-this.height - 50);
+
+            var yAxis = d3.axisLeft(y).ticks(4).tickSize(-this.width - 50);
+
+            x.domain([d3.min(this.data, function (d) {
+                return d.midpoint;
+            }), d3.max(this.data, function (d) {
+                return d.midpoint;
+            })]);
+            y.domain([0, 20]);
+
+            graph.append('g').attr('class', 'x-axis').attr('transform', 'translate(0, ' + this.height + ')').call(xAxis);
+
+            graph.append('g').attr('class', 'y-axis').call(yAxis);
+
+            var firstXAxis = d3.selectAll('.x-axis .tick').nodes()[0];
+            d3.select(firstXAxis).attr('visibility', 'hidden');
+            var firstYAxis = d3.selectAll('.y-axis .tick').nodes()[0];
+            d3.select(firstYAxis).attr('visibility', 'hidden');
+
+            var line = d3.line().x(function (d) {
+                return x(d.midpoint);
+            }).y(function (d) {
+                return y(d.percent);
+            });
+
+            console.log(d3.select(this.identity + ' small'));
+
+            d3.select(this.identity + ' small').text(this.attribution);
+        }
+    }]);
+
+    return FrequencyPolygon;
+}();
 
 /***/ }),
-/* 7 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

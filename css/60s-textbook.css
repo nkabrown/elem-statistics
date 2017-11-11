@@ -3,6 +3,12 @@ body {
   font-family: "Stymie", "Baskerville", serif;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 figure {
   width: 490px;
 }
