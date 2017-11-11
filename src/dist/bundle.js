@@ -2112,8 +2112,8 @@ var dataGenerator = function dataGenerator(mount, dataPath, template, caseName) 
   });
 };
 
-dataGenerator('table', '../data/memory-span.csv', 'src/template/table.html', 'TWO-GROUPS');
-dataGenerator('freq-table', '../data/scores.csv', 'src/template/table.html', 'FREQ-DIST');
+dataGenerator('table', 'src/data/memory-span.csv', 'src/template/table.html', 'TWO-GROUPS');
+dataGenerator('freq-table', 'src/data/scores.csv', 'src/template/table.html', 'FREQ-DIST');
 
 var switchcase = function switchcase(cases) {
   return function (key) {

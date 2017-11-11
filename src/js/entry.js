@@ -20,8 +20,8 @@ const dataGenerator = (mount, dataPath, template, caseName) => {
   });
 }
 
-dataGenerator('table', '../data/memory-span.csv', 'src/template/table.html', 'TWO-GROUPS');
-dataGenerator('freq-table', '../data/scores.csv', 'src/template/table.html', 'FREQ-DIST');
+dataGenerator('table', 'src/data/memory-span.csv', 'src/template/table.html', 'TWO-GROUPS');
+dataGenerator('freq-table', 'src/data/scores.csv', 'src/template/table.html', 'FREQ-DIST');
 
 const switchcase = cases => key => key in cases ? cases[key] : null;
 
