@@ -2105,7 +2105,7 @@ var dataGenerator = function dataGenerator(mount, dataPath, template, caseName) 
           return new _TwoGroupsTable.TwoGroupsTable('#table tbody', data, '#table', 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
         },
         'FREQ-POLY': function FREQPOLY() {
-          return new _FrequencyPolygon.FrequencyPolygon('#freq-polygon svg', data, '#freq-polygon', { top: 20, right: 20, bottom: 20, left: 45 }, 375, 225, '', 'Strong, E. K., Jr. Nineteen-year followup of engineer interests. J. appl. Psychol., 1952, 36, 65-74.').init();
+          return new _FrequencyPolygon.FrequencyPolygon('#freq-polygon svg', data, '#freq-polygon', { top: 20, right: 20, bottom: 60, left: 45 }, 375, 265, '', 'Strong, E. K., Jr. Nineteen-year followup of engineer interests. J. appl. Psychol., 1952, 36, 65-74.').init();
         }
       })(caseName);
     });
@@ -2114,6 +2114,7 @@ var dataGenerator = function dataGenerator(mount, dataPath, template, caseName) 
 
 dataGenerator('table', 'src/data/memory-span.csv', 'src/template/table.html', 'TWO-GROUPS');
 dataGenerator('freq-table', 'src/data/scores.csv', 'src/template/table.html', 'FREQ-DIST');
+dataGenerator('freq-polygon', 'src/data/engineering-interest.csv', 'src/template/graph.html', 'FREQ-POLY');
 
 var switchcase = function switchcase(cases) {
   return function (key) {
@@ -2292,7 +2293,7 @@ var FrequencyPolygon = exports.FrequencyPolygon = function () {
         _classCallCheck(this, FrequencyPolygon);
 
         this.mount = el;
-        this.data = d;
+        this.data = this.coerce(d);
         this.identity = i;
         this.margin = m;
         this.width = w - this.margin.right - this.margin.left;
@@ -2318,16 +2319,20 @@ var FrequencyPolygon = exports.FrequencyPolygon = function () {
 
             var yAxis = d3.axisLeft(y).ticks(4).tickSize(-this.width - 50);
 
-            x.domain([d3.min(this.data, function (d) {
+            var engineers = this.data.filter(function (d) {
+                return d.group == 'engineers';
+            });
+
+            x.domain([d3.min(engineers, function (d) {
                 return d.midpoint;
-            }), d3.max(this.data, function (d) {
+            }) - 5, d3.max(engineers, function (d) {
                 return d.midpoint;
             })]);
             y.domain([0, 20]);
 
-            graph.append('g').attr('class', 'x-axis').attr('transform', 'translate(0, ' + this.height + ')').call(xAxis);
+            graph.append('g').attr('class', 'x-axis').attr('transform', 'translate(0, ' + this.height + ')').call(xAxis).append('text').attr('x', 93).attr('y', 45).style('fill', '#000').style('font-family', 'Baskerville').style('font-size', 14).text('midpoint of class interval').attr('text-anchor', 'start');
 
-            graph.append('g').attr('class', 'y-axis').call(yAxis);
+            graph.append('g').attr('class', 'y-axis').call(yAxis).append('text').attr('x', -52).attr('y', -35).style('fill', '#000').style('font-family', 'Baskerville').style('font-size', 14).text('percent of cases').attr('text-anchor', 'end').attr('transform', 'rotate(-90)');
 
             var firstXAxis = d3.selectAll('.x-axis .tick').nodes()[0];
             d3.select(firstXAxis).attr('visibility', 'hidden');
@@ -2340,9 +2345,26 @@ var FrequencyPolygon = exports.FrequencyPolygon = function () {
                 return y(d.percent);
             });
 
-            console.log(d3.select(this.identity + ' small'));
+            graph.append('path').datum(engineers.reverse()).attr('d', line).style('fill', 'none').style('stroke', '#000').style('stroke-width', 2);
+
+            graph.selectAll('.datum-point').data(engineers.reverse()).enter().append('circle').attr('cx', function (d) {
+                return x(d.midpoint);
+            }).attr('cy', function (d) {
+                return y(d.percent);
+            }).attr('r', 2).style('fill', '#fff').style('stroke', '#000').style('stroke-width', 1.2);
+
+            graph.append('text').attr('x', 24).attr('y', 27).text('engineers');
 
             d3.select(this.identity + ' small').text(this.attribution);
+        }
+    }, {
+        key: 'coerce',
+        value: function coerce(data) {
+            data.forEach(function (d) {
+                d.midpoint = +d.midpoint;
+                d.percent = +d.percent;
+            });
+            return data;
         }
     }]);
 

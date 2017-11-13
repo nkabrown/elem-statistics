@@ -14,7 +14,7 @@ const dataGenerator = (mount, dataPath, template, caseName) => {
       switchcaseF({
         'FREQ-DIST': () => new FrequencyDistTable('#freq-table tbody', data, '#freq-table', 'SCORE', 'Table 2.1   /   Simple Frequency Distribution of Anxiety Scores for 100 College Students', 'Ahana, E. Y. A study on the reliability and internal consistency of a manifest anxiety scale. M.A. thesis, Northwestern Univeristy, 1952.').init(),
         'TWO-GROUPS': () => new TwoGroupsTable('#table tbody', data, '#table', 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init(),
-        'FREQ-POLY': () => new FrequencyPolygon('#freq-polygon svg', data, '#freq-polygon', {top:20,right:20,bottom:20,left:45}, 375, 225, '', 'Strong, E. K., Jr. Nineteen-year followup of engineer interests. J. appl. Psychol., 1952, 36, 65-74.').init()
+        'FREQ-POLY': () => new FrequencyPolygon('#freq-polygon svg', data, '#freq-polygon', {top:20,right:20,bottom:60,left:45}, 375, 265, '', 'Strong, E. K., Jr. Nineteen-year followup of engineer interests. J. appl. Psychol., 1952, 36, 65-74.').init()
       })(caseName);
     });
   });
@@ -22,6 +22,7 @@ const dataGenerator = (mount, dataPath, template, caseName) => {
 
 dataGenerator('table', 'src/data/memory-span.csv', 'src/template/table.html', 'TWO-GROUPS');
 dataGenerator('freq-table', 'src/data/scores.csv', 'src/template/table.html', 'FREQ-DIST');
+dataGenerator('freq-polygon', 'src/data/engineering-interest.csv', 'src/template/graph.html', 'FREQ-POLY');
 
 const switchcase = cases => key => key in cases ? cases[key] : null;
 
