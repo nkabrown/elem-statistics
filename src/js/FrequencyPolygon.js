@@ -2,9 +2,10 @@
 const d3 = require('./d3.min.js');
 
 export class FrequencyPolygon {
-  constructor(el, d, i, m, w, h, c, a) {
+  constructor(el, d, s, i, m, w, h, c, a) {
     this.mount = el;
     this.data = this.coerce(d);
+    this.selection = s;
     this.identity = i;
     this.margin = m;
     this.width = w - this.margin.right - this.margin.left;
@@ -43,9 +44,10 @@ export class FrequencyPolygon {
         .ticks(4)
         .tickSize(-this.width - 50);
 
-    const engineers = this.data.filter(d => d.group == 'engineers');
+    let data;
+    this.selection === 'both' ? data = this.data : data = this.data.filter(d => d.group === this.selection);
 
-    x.domain([d3.min(engineers, d => d.midpoint) - 5, d3.max(engineers, d => d.midpoint)]);
+    x.domain([d3.min(data, d => d.midpoint) - 5, d3.max(data, d => d.midpoint)]);
     y.domain([0, 20]);
 
     graph.append('g')
@@ -74,9 +76,9 @@ export class FrequencyPolygon {
         .attr('text-anchor', 'end')
         .attr('transform', 'rotate(-90)');
 
-    const firstXAxis = d3.selectAll('.x-axis .tick').nodes()[0]
+    const firstXAxis = d3.selectAll(`${this.identity} svg g.x-axis .tick`).nodes()[0]
     d3.select(firstXAxis).attr('visibility', 'hidden');
-    const firstYAxis = d3.selectAll('.y-axis .tick').nodes()[0];
+    const firstYAxis = d3.selectAll(`${this.identity} svg g.y-axis .tick`).nodes()[0];
     d3.select(firstYAxis).attr('visibility', 'hidden');
 
     const line = d3.line()
@@ -84,14 +86,14 @@ export class FrequencyPolygon {
        .y(d => y(d.percent));
 
     graph.append('path')
-        .datum(engineers.reverse())
+        .datum(data.reverse())
         .attr('d', line)
         .style('fill', 'none')
         .style('stroke', '#000')
         .style('stroke-width', 2);
 
     graph.selectAll('.datum-point')
-        .data(engineers.reverse())
+        .data(data.reverse())
       .enter().append('circle')
         .attr('cx', d => x(d.midpoint))
         .attr('cy', d => y(d.percent))
@@ -103,7 +105,7 @@ export class FrequencyPolygon {
     graph.append('text')
         .attr('x', 24)
         .attr('y', 27)
-        .text('engineers');
+        .text(this.selection);
 
     d3.select(`${this.identity} small`)
         .text(this.attribution);

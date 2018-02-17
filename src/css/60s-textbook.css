@@ -115,3 +115,8 @@ small {
 rect.polygon-background {
   fill: rgba(153,153,153,0.8);
 }
+
+.polygons {
+  display: flex;
+  flex-direction: row;
+}

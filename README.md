@@ -2,9 +2,9 @@
 
 Spence, Underwood, Duncan, and Cotton. Second edition. 1968.
 
-A collection of tables and graphical representations of elementary statistics.
+A collection of tables and graphical representations of elementary statistical principles.
 
-To try for yourself clone and install.
+To view or try for yourself clone and install.
 
 `git clone https://github.com/nkabrown/elem-statistics.git`
 

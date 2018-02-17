@@ -2082,15 +2082,36 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 "use strict";
 
 
-var _FrequencyDistTable = __webpack_require__(2);
-
-var _FrequencyPolygon = __webpack_require__(3);
-
-var _TwoGroupsTable = __webpack_require__(4);
+var _dataGenerator = __webpack_require__(2);
 
 var d3 = __webpack_require__(0);
 
-var dataGenerator = function dataGenerator(mount, dataPath, template, caseName) {
+(0, _dataGenerator.dataGenerator)('table', 'src/data/memory-span.csv', 'src/template/table.html', 'TWO-GROUPS');
+(0, _dataGenerator.dataGenerator)('freq-table', 'src/data/scores.csv', 'src/template/table.html', 'FREQ-DIST');
+(0, _dataGenerator.dataGenerator)('freq-polygon-2', 'src/data/engineering-interest.csv', 'src/template/graph.html', 'FREQ-POLY-ENG');
+(0, _dataGenerator.dataGenerator)('freq-polygon-3', 'src/data/engineering-interest.csv', 'src/template/graph.html', 'FREQ-POLY-FRESH');
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.dataGenerator = undefined;
+
+var _FrequencyDistTable = __webpack_require__(3);
+
+var _FrequencyPolygon = __webpack_require__(4);
+
+var _TwoGroupsTable = __webpack_require__(5);
+
+var d3 = __webpack_require__(0);
+
+var dataGenerator = exports.dataGenerator = function dataGenerator(mount, dataPath, template, caseName) {
   d3.csv(dataPath, function (error, data) {
     if (error) throw error;
 
@@ -2105,16 +2126,18 @@ var dataGenerator = function dataGenerator(mount, dataPath, template, caseName) 
           return new _TwoGroupsTable.TwoGroupsTable('#table tbody', data, '#table', 'Table 1.1  /  Scores Made by the Neutral and the Anxious Group on Memory Span for Digits', 'Moldawsky, S., and Moldawsky, P.C. Digit span as an anxiety indicator. J. consult. Psychol., 1952, 16, 115-118. Raw data courtesy of the authors.').init();
         },
         'FREQ-POLY': function FREQPOLY() {
-          return new _FrequencyPolygon.FrequencyPolygon('#freq-polygon svg', data, '#freq-polygon', { top: 20, right: 20, bottom: 60, left: 45 }, 375, 265, '', 'Strong, E. K., Jr. Nineteen-year followup of engineer interests. J. appl. Psychol., 1952, 36, 65-74.').init();
+          return new _FrequencyPolygon.FrequencyPolygon('#freq-polygon-1 svg', data, 'both', '#freq-polygon-1', { top: 20, right: 20, bottom: 60, left: 45 }, 570, 465, '', 'Strong, E. K., Jr. Nineteen-year followup of engineer interests. J. appl. Psychol., 1952, 36, 65-74.').init();
+        },
+        'FREQ-POLY-ENG': function FREQPOLYENG() {
+          return new _FrequencyPolygon.FrequencyPolygon('#freq-polygon-2 svg', data, 'engineers', '#freq-polygon-2', { top: 20, right: 20, bottom: 60, left: 45 }, 375, 265, '', '').init();
+        },
+        'FREQ-POLY-FRESH': function FREQPOLYFRESH() {
+          return new _FrequencyPolygon.FrequencyPolygon('#freq-polygon-3 svg', data, 'freshmen', '#freq-polygon-3', { top: 20, right: 20, bottom: 60, left: 45 }, 375, 265, '', '').init();
         }
       })(caseName);
     });
   });
 };
-
-dataGenerator('table', 'src/data/memory-span.csv', 'src/template/table.html', 'TWO-GROUPS');
-dataGenerator('freq-table', 'src/data/scores.csv', 'src/template/table.html', 'FREQ-DIST');
-dataGenerator('freq-polygon', 'src/data/engineering-interest.csv', 'src/template/graph.html', 'FREQ-POLY');
 
 var switchcase = function switchcase(cases) {
   return function (key) {
@@ -2129,7 +2152,7 @@ var switchcaseF = function switchcaseF(cases) {
 };
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2272,7 +2295,7 @@ var FrequencyDistTable = exports.FrequencyDistTable = function () {
 }();
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2289,11 +2312,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var d3 = __webpack_require__(0);
 
 var FrequencyPolygon = exports.FrequencyPolygon = function () {
-    function FrequencyPolygon(el, d, i, m, w, h, c, a) {
+    function FrequencyPolygon(el, d, s, i, m, w, h, c, a) {
         _classCallCheck(this, FrequencyPolygon);
 
         this.mount = el;
         this.data = this.coerce(d);
+        this.selection = s;
         this.identity = i;
         this.margin = m;
         this.width = w - this.margin.right - this.margin.left;
@@ -2305,6 +2329,8 @@ var FrequencyPolygon = exports.FrequencyPolygon = function () {
     _createClass(FrequencyPolygon, [{
         key: 'init',
         value: function init() {
+            var _this = this;
+
             d3.select(this.identity + ' figcaption').text(this.caption);
 
             var graph = d3.select(this.mount).attr('width', this.width + this.margin.right + this.margin.left).attr('height', this.height + this.margin.bottom + this.margin.top).append('g').attr('transform', 'translate(' + this.margin.left + ', ' + this.margin.top + ')');
@@ -2319,13 +2345,14 @@ var FrequencyPolygon = exports.FrequencyPolygon = function () {
 
             var yAxis = d3.axisLeft(y).ticks(4).tickSize(-this.width - 50);
 
-            var engineers = this.data.filter(function (d) {
-                return d.group == 'engineers';
+            var data = void 0;
+            this.selection === 'both' ? data = this.data : data = this.data.filter(function (d) {
+                return d.group === _this.selection;
             });
 
-            x.domain([d3.min(engineers, function (d) {
+            x.domain([d3.min(data, function (d) {
                 return d.midpoint;
-            }) - 5, d3.max(engineers, function (d) {
+            }) - 5, d3.max(data, function (d) {
                 return d.midpoint;
             })]);
             y.domain([0, 20]);
@@ -2334,9 +2361,9 @@ var FrequencyPolygon = exports.FrequencyPolygon = function () {
 
             graph.append('g').attr('class', 'y-axis').call(yAxis).append('text').attr('x', -52).attr('y', -35).style('fill', '#000').style('font-family', 'Baskerville').style('font-size', 14).text('percent of cases').attr('text-anchor', 'end').attr('transform', 'rotate(-90)');
 
-            var firstXAxis = d3.selectAll('.x-axis .tick').nodes()[0];
+            var firstXAxis = d3.selectAll(this.identity + ' svg g.x-axis .tick').nodes()[0];
             d3.select(firstXAxis).attr('visibility', 'hidden');
-            var firstYAxis = d3.selectAll('.y-axis .tick').nodes()[0];
+            var firstYAxis = d3.selectAll(this.identity + ' svg g.y-axis .tick').nodes()[0];
             d3.select(firstYAxis).attr('visibility', 'hidden');
 
             var line = d3.line().x(function (d) {
@@ -2345,15 +2372,15 @@ var FrequencyPolygon = exports.FrequencyPolygon = function () {
                 return y(d.percent);
             });
 
-            graph.append('path').datum(engineers.reverse()).attr('d', line).style('fill', 'none').style('stroke', '#000').style('stroke-width', 2);
+            graph.append('path').datum(data.reverse()).attr('d', line).style('fill', 'none').style('stroke', '#000').style('stroke-width', 2);
 
-            graph.selectAll('.datum-point').data(engineers.reverse()).enter().append('circle').attr('cx', function (d) {
+            graph.selectAll('.datum-point').data(data.reverse()).enter().append('circle').attr('cx', function (d) {
                 return x(d.midpoint);
             }).attr('cy', function (d) {
                 return y(d.percent);
             }).attr('r', 2).style('fill', '#fff').style('stroke', '#000').style('stroke-width', 1.2);
 
-            graph.append('text').attr('x', 24).attr('y', 27).text('engineers');
+            graph.append('text').attr('x', 24).attr('y', 27).text(this.selection);
 
             d3.select(this.identity + ' small').text(this.attribution);
         }
@@ -2372,7 +2399,7 @@ var FrequencyPolygon = exports.FrequencyPolygon = function () {
 }();
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
